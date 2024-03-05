@@ -8,18 +8,19 @@
 setopt nopromptbang prompt{cr,percent,sp,subst}
 
 zstyle ':zim:prompt-pwd' git-root yes
+zstyle ':zim:prompt-pwd:fish-style' dir-length 1
 
 typeset -gA git_info
 if (( ${+functions[git-info]} )); then
   zstyle ':zim:git-info:branch' format '%b'
   zstyle ':zim:git-info:commit' format '%c'
-  zstyle ':zim:git-info:clean' format '%F{green}◍'
-  zstyle ':zim:git-info:dirty' format '%F{yellow}◍'
+  zstyle ':zim:git-info:clean' format '%F{green}%{%G✓%}'
+  zstyle ':zim:git-info:dirty' format '%F{yellow}%{%G✗%}'
   zstyle ':zim:git-info:keys' format \
-      'prompt' ' %F{white}%b%c %C%D'
+      'prompt' ' %F{cyan}%b%c %C%D'
 
   autoload -Uz add-zsh-hook && add-zsh-hook precmd git-info
 fi
 
-PS1='%(?:%F{white}:%F{red})◼ ${SSH_TTY:+"%F{white}%n "}%F{blue}$(prompt-pwd)${(e)git_info[prompt]}%f '
+PS1='%B%(?:%F{white}:%F{red})%{%G◼%} %F{blue}$(prompt-pwd)${(e)git_info[prompt]}%f%b '
 unset RPS1
